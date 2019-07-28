@@ -10,6 +10,6 @@ $factory->define(Comment::class, function (Faker $faker) {
         'content' => $faker->text(200),
         'date_written' => now(),
         'user_id'=> $faker->numberBetween(1, 50),
-        'post_id'=> $faker->numberBetween(1, 50),
+        'post_id'=> $faker->numberBetween(1, 500),
     ];
 });

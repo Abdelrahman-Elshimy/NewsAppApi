@@ -13,6 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
+/**
+ * @User related
+ */
+
+Route::get('/authors', 'Api\\UserController@index');
+
+Route::get('/authors/{id}', 'Api\\UserController@show');
+
+// End User related api
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
