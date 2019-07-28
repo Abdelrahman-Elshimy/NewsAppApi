@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = \App\User::paginate();
+        $users = \App\User::paginate(10);
         return new \App\Http\Resources\UsersResource($users);
     }
 
@@ -41,6 +41,8 @@ class UserController extends Controller
         return new \App\Http\Resources\UserResource($user);
     }
 
+    
+
     /**
      * Update the specified resource in storage.
      *
@@ -62,5 +64,16 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function posts($id) {
+        $user = \App\User::find($id);
+        $posts = $user->posts()->paginate(15);
+        return new \App\Http\Resources\AuthorPostsResource($posts);
+    }
+    public function comments($id) {
+        $user = \App\User::find($id);
+        $comments = $user->comments()->paginate(15);
+        return new \App\Http\Resources\AuthorCommentsResource($comments);
     }
 }

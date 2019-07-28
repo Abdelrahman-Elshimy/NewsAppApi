@@ -17,9 +17,10 @@ use Illuminate\Http\Request;
  * @User related
  */
 
-Route::get('/authors', 'Api\\UserController@index');
-
-Route::get('/authors/{id}', 'Api\\UserController@show');
+Route::get('authors', 'Api\\UserController@index');
+Route::get('authors/{id}', 'Api\\UserController@show');
+Route::get('posts/author/{id}', 'Api\\UserController@posts');
+Route::get('comments/author/{id}', 'Api\\UserController@comments');
 
 // End User related api
 
