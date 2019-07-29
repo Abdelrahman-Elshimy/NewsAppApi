@@ -17,10 +17,26 @@ use Illuminate\Http\Request;
  * @User related
  */
 
-Route::get('authors', 'Api\\UserController@index');
-Route::get('authors/{id}', 'Api\\UserController@show');
-Route::get('posts/author/{id}', 'Api\\UserController@posts');
-Route::get('comments/author/{id}', 'Api\\UserController@comments');
+Route::get('authors', 'Api\UserController@index');
+Route::get('authors/{id}', 'Api\UserController@show');
+Route::get('posts/author/{id}', 'Api\UserController@posts');
+Route::get('comments/author/{id}', 'Api\UserController@comments');
+
+/**
+ * @Posts related
+ */
+
+ Route::get('categories', 'Api\CategoryController@index');
+ Route::get('posts/categories/{id}', 'Api\CategoryController@posts');
+ Route::get('posts', 'Api\PostController@index');
+ Route::get('posts/{id}', 'Api\PostController@show');
+
+ Route::get('comments', 'Api\CommentController@index');
+ Route::get('comments/posts/{id}', 'Api\CommentController@comments');
+ Route::get('comments/{id}', 'Api\CommentController@show');
+
+
+
 
 // End User related api
 
