@@ -30,7 +30,7 @@ class UserController extends Controller
         $user = new \App\User;
         $user->name = $request->get('name');
         $user->email = $request->get('email');
-        $user->password = $request->get('password');
+        $user->password = \Hash::make($request->get('password'));
         $user->save();
 
         return new \App\Http\Resources\UserResource($user);
@@ -67,15 +67,25 @@ class UserController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
+     * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = \App\User::find($id);
+
+        if($request->has('name')) {
+          $user->name = $request->get('name');
+        }
+        if($request->has('avatar')) {
+          $user->name = $request->get('avatar');
+        }
+
+        $user->save();
+
+        return new \App\Http\Resources\UserResource($user);
     }
 
     /**
