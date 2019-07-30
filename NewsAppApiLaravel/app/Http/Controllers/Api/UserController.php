@@ -18,15 +18,38 @@ class UserController extends Controller
         return new \App\Http\Resources\UsersResource($users);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        $request->validate([
+          'name' => 'required',
+          'email' => 'required',
+          'password' => 'required',
+        ]);
+
+        $user = new \App\User;
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = $request->get('password');
+        $user->save();
+
+        return new \App\Http\Resources\UserResource($user);
+
+    }
+
+    public function getToken(Request $request){
+      $request->validate([
+        'email' => 'required',
+        'password' => 'required'
+      ]);
+
+      $crediantials = $request->only('email', 'password');
+      if(\Auth::attempt($crediantials)) {
+        $user = \App\User::where('email', $request->get('email'))->first();
+        return new \App\Http\Resources\TokenResource(['token' => $user->api_token]);
+      }
+
+      return 'Not Found';
     }
 
     /**
@@ -41,7 +64,7 @@ class UserController extends Controller
         return new \App\Http\Resources\UserResource($user);
     }
 
-    
+
 
     /**
      * Update the specified resource in storage.

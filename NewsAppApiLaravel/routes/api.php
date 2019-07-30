@@ -35,10 +35,23 @@ Route::get('comments/author/{id}', 'Api\UserController@comments');
  Route::get('comments/posts/{id}', 'Api\CommentController@comments');
  Route::get('comments/{id}', 'Api\CommentController@show');
 
+ // End Get related api
+
+ /**
+ * Start Posts Request
+ */
+
+ Route::post('register', 'Api\UserController@store');
+ Route::post('token', 'Api\UserController@getToken');
+
+ /**
+ * End Posts Request
+ */
 
 
 
-// End User related api
+
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
