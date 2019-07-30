@@ -7,26 +7,37 @@ use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $posts = \App\Post::paginate(15);
         return new \App\Http\Resources\PostsResource($posts);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+      $request->validate([
+        'title' => 'required',
+        'content' => 'required',
+        'category_id' => 'required',
+      ]);
+
+      $user = $request->user();
+      $post = new \App\Post;
+      $post->title = $request->get('title');
+      $post->content = $request->get('content');
+      $post->category_id = intval($request->get('category_id'));
+      $post->user_id = $user->id;
+
+      $post->vote_up = 0;
+      $post->vote_down = 0;
+      $post->date_written = now()->format('Y-m-d H-i-s');
+      $post->featured_image = '';
+
+      $post->save();
+
+      return new \App\Http\Resources\PostResource($post);
     }
 
     /**
