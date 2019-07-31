@@ -65,7 +65,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = \App\Post::find($id);
+        $post = \App\Post::with(['comments', 'author', 'category'])->where('id', $id)->get();
         return new \App\Http\Resources\PostResource($post);
     }
 
