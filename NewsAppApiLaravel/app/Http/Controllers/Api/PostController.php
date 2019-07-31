@@ -11,7 +11,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = \App\Post::paginate(15);
+        $posts =  \App\Post::with(['comments', 'author', 'category'])->paginate(15);
         return new \App\Http\Resources\PostsResource($posts);
     }
 
