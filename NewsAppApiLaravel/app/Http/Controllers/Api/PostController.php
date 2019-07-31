@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Storage;
 
 class PostController extends Controller
 {
@@ -33,7 +34,23 @@ class PostController extends Controller
       $post->vote_up = 0;
       $post->vote_down = 0;
       $post->date_written = now()->format('Y-m-d H-i-s');
-      $post->featured_image = '';
+
+      // upload feature image
+
+      if($request->hasFile('featured_image')) {
+        $featuredImage = $request->file('featured_image');
+        $filename = time().$featuredImage->getClientOriginalName();
+        $path = '/public/images/';
+        Storage::disk('local')->putFileAs(
+          $path,
+          $featuredImage,
+          $filename
+        );
+
+        $post->featured_image = 'http://localhost/NewsAppApi/NewsAppApiLaravel/storage/app/public/images/'.$filename;
+      }
+
+
 
       $post->save();
 
@@ -61,7 +78,44 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+
+      $post = \App\Post::find($id);
+
+      $user = $request->user();
+
+      if($request->has('title')) {
+        $post->title = $request->get('title');
+      }
+
+      if($request->has('content')) {
+        $post->content = $request->get('content');
+      }
+
+      if($request->has('category_id')) {
+        $post->category_id = intval($request->get('category_id'));
+      }
+
+      // upload feature image
+
+      if($request->hasFile('featured_image')) {
+        $featuredImage = $request->file('featured_image');
+        $filename = time().$featuredImage->getClientOriginalName();
+        $path = '/public/images/';
+        Storage::disk('local')->putFileAs(
+          $path,
+          $featuredImage,
+          $filename
+        );
+
+        $post->featured_image = 'http://localhost/NewsAppApi/NewsAppApiLaravel/storage/app/public/images/'.$filename;
+      }
+
+
+
+      $post->save();
+
+      return new \App\Http\Resources\PostResource($post);
     }
 
     /**
@@ -72,6 +126,8 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $post = \App\Post::where('id',$id)->first();
+      $post->delete();
+      return new \App\Http\Resources\PostResource($post);
     }
 }
